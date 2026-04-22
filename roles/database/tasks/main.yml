@@ -1,0 +1,13 @@
+---
+# tasks file for database
+- name: Install MariaDB (MySQL)
+  ansible.builtin.yum:
+    name: mariadb-server
+    state: present
+    update_cache: yes
+
+- name: Start MariaDB service and enable on boot
+  ansible.builtin.service:
+    name: mariadb
+    state: started
+    enabled: yes

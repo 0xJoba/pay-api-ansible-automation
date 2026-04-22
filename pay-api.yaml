@@ -1,56 +1,12 @@
 ---
-- name: Configure pay-api web nodes
+- name: Setup Database
+  hosts: dbservers
+  become: yes
+  roles:
+    - database
+
+- name: Setup Web Servers
   hosts: webservers
   become: yes
-  tasks:
-    - name: Install httpd on CentOS
-      ansible.builtin.yum:
-        name: httpd
-        state: present
-      when: ansible_os_family == "RedHat"
- 
-    - name: Install apache2 on Ubuntu
-      ansible.builtin.apt:
-        name: apache2
-        state: present
-        update_cache: yes
-      when: ansible_os_family == "Debian"
- 
-    - name: Start the web service on CentOS
-      ansible.builtin.service:
-        name: httpd
-        state: started
-        enabled: yes
-      when: ansible_os_family == "RedHat"
- 
-    - name: Start the web service on Ubuntu
-      ansible.builtin.service:
-        name: apache2
-        state: started
-        enabled: yes
-      when: ansible_os_family == "Debian"
-
-- name: Install standard tools on CentOS
-      ansible.builtin.yum:
-        name: "{{ item }}"
-        state: present
-      loop:
-        - git
-        - wget
-        - zip
-        - unzip
-        - htop  # Add this line
-      when: ansible_os_family == "RedHat"
-
-    - name: Install standard tools on Ubuntu
-      ansible.builtin.apt:
-        name: "{{ item }}"
-        state: present
-        update_cache: yes
-      loop:
-        - git
-        - wget
-        - zip
-        - unzip
-        - htop  # Add this line
-      when: ansible_os_family == "Debian"
+  roles:
+    - webserver
